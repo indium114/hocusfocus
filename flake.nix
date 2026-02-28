@@ -36,7 +36,7 @@
           meta = with pkgs.lib; {
             description = "A simple TUI productivity tool";
             license = licenses.mit;
-            platforms = platforms.linux;
+            platforms = platforms.all;
           };
         };
 
