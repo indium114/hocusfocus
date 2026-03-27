@@ -2,12 +2,12 @@
 
 *Hocusfocus* is a terminal-based productivity tracker written in Go!,
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/StikyPiston/hocusfocus)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/indium114/hocusfocus)
 
 ## Installation
 
 ```shell
-brew install stikypiston/formulae/hocusfocus
+brew install indium114/formulae/hocusfocus
 ```
 
 ## Usage

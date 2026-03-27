@@ -1,4 +1,4 @@
-module github.com/stikypiston/hocusfocus
+module github.com/indium114/hocusfocus
 
 go 1.25.5
 
