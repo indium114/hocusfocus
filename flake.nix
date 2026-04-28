@@ -24,7 +24,7 @@
 
         packages.hocusfocus = pkgs.buildGoModule {
           pname = "hocusfocus";
-          version = "2026.02.06-a";
+          version = "2026.04.28-a";
 
           src = self;
 
