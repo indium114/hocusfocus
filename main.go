@@ -99,6 +99,14 @@ func printCurrentSession() {
 	)
 }
 
+func printHelp() {
+	fmt.Println("hocusfocus help:")
+	fmt.Println("<no args>      : choose/stop session")
+	fmt.Println("help           : print this message")
+	fmt.Println("currentsession : print current session")
+	fmt.Println("stats          : print statistics")
+}
+
 // Bubbletea TUI
 type item string
 
@@ -231,6 +239,9 @@ func main() {
 			return
 		case "currentsession":
 			printCurrentSession()
+			return
+		case "help":
+			printHelp()
 			return
 		}
 	}
