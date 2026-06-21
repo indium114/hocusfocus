@@ -8,20 +8,20 @@ fn main() {
     if args.len() > 1 {
         match args[1].as_str() {
             "help" => {
-                println!("called help");
-                return
+                help::print_help();
+                return;
             }
             "currentsession" => {
                 println!("called currentsession");
-                return
+                return;
             }
             "stats" => {
                 println!("called stats");
-                return
+                return;
             }
             _ => {
                 println!("called help through unknown arg");
-                return
+                return;
             }
         }
     }
