@@ -3,25 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
-	"github.com/charmbracelet/bubbles/list"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
-)
-
-const listHeight = 14
-
-var (
-	titleStyle        = lipgloss.NewStyle().MarginLeft(2)
-	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
-	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
-	paginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
-	helpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
+	"github.com/charmbracelet/huh"
 )
 
 // Session storage
@@ -107,127 +93,36 @@ func printHelp() {
 	fmt.Println("stats          : print statistics")
 }
 
-// Bubbletea TUI
-type item string
+func stopSession(sessions []Session) {
+	now := time.Now()
 
-func (i item) FilterValue() string { return "" }
-
-type stopItem struct{}
-
-func (s stopItem) FilterValue() string { return "" }
-
-type itemDelegate struct{}
-
-func (d itemDelegate) Height() int                             { return 1 }
-func (d itemDelegate) Spacing() int                            { return 0 }
-func (d itemDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
-
-func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	var str string
-	switch i := listItem.(type) {
-	case item:
-		str = fmt.Sprintf("%d. %s", index+1, string(i))
-	case stopItem:
-		str = fmt.Sprintf("%d. %s", index+1, "Stop current session")
-	default:
-		return
-	}
-
-	fn := itemStyle.Render
-	if index == m.Index() {
-		fn = func(s ...string) string {
-			return selectedItemStyle.Render("> " + strings.Join(s, " "))
+	for idx := range sessions {
+		if sessions[idx].End == nil {
+			sessions[idx].End = &now
+			break
 		}
 	}
 
-	fmt.Fprint(w, fn(str))
+	saveSessions(sessions)
 }
 
-type model struct {
-	list     list.Model
-	sessions []Session
-}
+func startSession(kind string, sessions []Session) {
+	now := time.Now()
 
-func (m model) Init() tea.Cmd {
-	return nil
-}
-
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-
-	case tea.WindowSizeMsg:
-		m.list.SetWidth(msg.Width)
-		return m, nil
-
-	case tea.KeyMsg:
-		switch msg.String() {
-
-		case "q", "ctrl+c":
-			return m, tea.Quit
-
-		case "enter":
-			i := m.list.SelectedItem()
-			if i == nil {
-				return m, nil
-			}
-
-			now := time.Now()
-
-			switch v := i.(type) {
-			case stopItem:
-				// Stop session
-				for idx := range m.sessions {
-					if m.sessions[idx].End == nil {
-						m.sessions[idx].End = &now
-						break
-					}
-				}
-				saveSessions(m.sessions)
-				return m, tea.Quit
-
-			case item:
-				// End active session if one exists
-				for idx := range m.sessions {
-					if m.sessions[idx].End == nil {
-						m.sessions[idx].End = &now
-						break
-					}
-				}
-				// Start new session
-				m.sessions = append(m.sessions, Session{
-					Type:  string(v),
-					Start: now,
-					End:   nil,
-				})
-				saveSessions(m.sessions)
-				return m, tea.Quit
-			}
+	// End active session if one exists
+	for idx := range sessions {
+		if sessions[idx].End == nil {
+			sessions[idx].End = &now
+			break
 		}
 	}
-
-	var cmd tea.Cmd
-	m.list, cmd = m.list.Update(msg)
-	return m, cmd
-}
-
-func (m model) View() string {
-	return "\n" + m.list.View()
-}
-
-// Build list
-func buildItems(sessions []Session) []list.Item {
-	items := []list.Item{
-		item("Work"),
-		item("Study"),
-		item("Waste"),
-	}
-
-	if currentSession(sessions) != nil {
-		// Prepend Stop item if a session is active
-		items = append([]list.Item{stopItem{}}, items...)
-	}
-
-	return items
+	// Start new session
+	sessions = append(sessions, Session{
+		Type:  string(kind),
+		Start: now,
+		End:   nil,
+	})
+	saveSessions(sessions)
 }
 
 // Main function
@@ -247,25 +142,34 @@ func main() {
 	}
 
 	sessions := loadSessions()
-	items := buildItems(sessions)
 
-	const defaultWidth = 20
+	var kind string
+	form := huh.NewForm(
+		huh.NewGroup(
+			huh.NewSelect[string]().
+				Title("HocusFocus").
+				Options(
+					huh.NewOption("Work", "work"),
+					huh.NewOption("Study", "study"),
+					huh.NewOption("Waste", "waste"),
+					huh.NewOption("Stop Current Session", "stop"),
+				).
+				Value(&kind),
+		),
+	)
 
-	l := list.New(items, itemDelegate{}, defaultWidth, listHeight)
-	l.Title = "Select a Session"
-	l.SetShowStatusBar(false)
-	l.SetFilteringEnabled(false)
-	l.Styles.Title = titleStyle
-	l.Styles.PaginationStyle = paginationStyle
-	l.Styles.HelpStyle = helpStyle
-
-	m := model{
-		list:     l,
-		sessions: sessions,
+	err := form.Run()
+	if err != nil {
+		panic(err)
 	}
 
-	if _, err := tea.NewProgram(m).Run(); err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
+	if kind == "stop" {
+		if currentSession(sessions) == nil {
+			fmt.Println("No current session")
+		} else {
+			stopSession(sessions)
+		}
+	} else {
+		startSession(kind, sessions)
 	}
 }

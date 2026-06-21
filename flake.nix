@@ -24,11 +24,11 @@
 
         packages.hocusfocus = pkgs.buildGoModule {
           pname = "hocusfocus";
-          version = "2026.04.28-a";
+          version = "2026.06.21-a";
 
           src = self;
 
-          vendorHash = "sha256-SMhllO87YlmySHroKfPq1pHb67CwHaZ3XMp3t983etc=";
+          vendorHash = "sha256-bWZmnNEUkc99TnQdgIqnY4ExsPkvo7GUSyfaYOLczAg=";
 
           subPackages = [ "." ];
           ldflags = [ "-s" "-w" ];
