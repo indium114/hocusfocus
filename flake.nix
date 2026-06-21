@@ -26,7 +26,7 @@
 
         packages.hocusfocus = pkgs.rustPlatform.buildRustPackage {
           name = "hocusfocus";
-          version = "2.0.1";
+          version = "2.0.2";
 
           src = ./.;
 
