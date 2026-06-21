@@ -49,6 +49,7 @@ pub fn print_help() {
     println!(" help           : print this message");
     println!(" currentsession : print current session");
     println!(" stats          : print statistics");
+    println!(" version        : print version");
 }
 
 pub fn current_session(sessions: &[Session]) -> Option<&Session> {

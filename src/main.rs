@@ -2,10 +2,12 @@ use chrono::Local;
 use demand::{DemandOption, Select};
 use humantime::format_duration;
 use std::env;
-use std::time::Duration;
 use std::io;
+use std::time::Duration;
 
 mod help;
+
+static VERSION: &str = env!("CARGO_PKG_VERSION");
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -39,8 +41,12 @@ fn main() {
                 help::print_stats();
                 return;
             }
+            "version" => {
+                println!("hocusfocus {}", VERSION);
+                return
+            }
             _ => {
-                println!("called help through unknown arg");
+                help::print_help();
                 return;
             }
         }
@@ -95,7 +101,7 @@ fn main() {
         },
         Err(e) => {
             if e.kind() == io::ErrorKind::Interrupted {
-                return
+                return;
             } else {
                 panic!("error: {}", e);
             }
