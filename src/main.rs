@@ -35,7 +35,7 @@ fn main() {
                 return;
             }
             "stats" => {
-                println!("called stats");
+                help::print_stats();
                 return;
             }
             _ => {

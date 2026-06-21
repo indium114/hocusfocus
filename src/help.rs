@@ -1,7 +1,10 @@
 use chrono::{DateTime, FixedOffset, Local};
 use dirs;
+use humantime::format_duration;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fs;
+use std::time::{Duration, Instant};
 
 // MARK: types
 #[derive(Serialize, Deserialize, Debug)]
@@ -78,4 +81,30 @@ pub fn start_session(kind: String, sessions: &mut Vec<Session>) {
     };
 
     sessions.push(new_session);
+}
+
+pub fn print_stats() {
+    let sessions = load_sessions();
+    let mut totals: HashMap<String, Duration> = HashMap::new();
+
+    for i in sessions {
+        if let Some(end_time) = i.end {
+            let dur = end_time - i.start;
+            let seconds_dur = Duration::from_secs(dur.num_seconds() as u64);
+            let formatted_dur = format_duration(seconds_dur).to_string();
+            let std_dur = formatted_dur.parse::<humantime::Duration>().unwrap().into();
+            *totals.entry(i.kind).or_insert(Duration::ZERO) += std_dur;
+        } else {
+            continue;
+        }
+    }
+
+    if totals.len() == 0 {
+        println!(" No sessions have been completed.");
+        return;
+    }
+
+    for (kind, dur) in totals {
+        println!("{}: {}", kind, format_duration(dur))
+    }
 }
