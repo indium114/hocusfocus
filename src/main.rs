@@ -9,15 +9,19 @@ fn main() {
         match args[1].as_str() {
             "help" => {
                 println!("called help")
+                return
             }
             "currentsession" => {
                 println!("called currentsession")
+                return
             }
             "stats" => {
                 println!("called stats")
+                return
             }
             _ => {
                 println!("called help through unknown arg")
+                return
             }
         }
     }
