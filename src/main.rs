@@ -27,7 +27,7 @@ fn main() {
         }
     }
 
-    let sessions: Vec<help::Session> = help::load_sessions();
+    let mut sessions: Vec<help::Session> = help::load_sessions();
 
     let form = Select::new("HocusFocus")
         .description("choose a session type")
@@ -51,8 +51,15 @@ fn main() {
             "Stop Current Session" => {
                 let current = help::current_session(&sessions);
                 match current {
-                    Some(session) => {
-                        println!("{:#?}", session.kind);
+                    Some(_) => {
+                        help::stop_session(&mut sessions);
+                        let success = help::save_sessions(sessions);
+                        match success {
+                            true => (),
+                            false => {
+                                println!("failed to save sessions");
+                            }
+                        }
                     }
                     None => {
                         println!("No current session")

@@ -56,3 +56,14 @@ pub fn current_session(sessions: &[Session]) -> Option<&Session> {
     }
     return None;
 }
+
+pub fn stop_session(sessions: &mut [Session]) {
+    let now = Local::now();
+
+    for idx in sessions {
+        if idx.end.is_none() {
+            let current: DateTime<FixedOffset> = now.into();
+            idx.end = Some(current);
+        }
+    }
+}
