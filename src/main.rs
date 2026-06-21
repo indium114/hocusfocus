@@ -49,7 +49,15 @@ fn main() {
                 println!("Waste")
             }
             "Stop Current Session" => {
-                println!("Stop")
+                let current = help::current_session(&sessions);
+                match current {
+                    Some(session) => {
+                        println!("{:#?}", session.kind);
+                    }
+                    None => {
+                        println!("No current session")
+                    }
+                }
             }
             _ => (),
         },

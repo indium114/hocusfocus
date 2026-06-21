@@ -7,7 +7,7 @@ use std::fs;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Session {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub kind: String,
     pub start: DateTime<FixedOffset>,
     pub end: Option<DateTime<FixedOffset>>,
 }
@@ -46,4 +46,13 @@ pub fn print_help() {
     println!(" help           : print this message");
     println!(" currentsession : print current session");
     println!(" stats          : print statistics");
+}
+
+pub fn current_session(sessions: &[Session]) -> Option<&Session> {
+    for session in sessions {
+        if session.end.is_none() {
+            return Some(session);
+        }
+    }
+    return None;
 }
