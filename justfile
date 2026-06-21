@@ -1,5 +1,2 @@
 build:
-	pkgx go build
-
-run:
-	pkgx go run .
+    nix build .#hocusfocus

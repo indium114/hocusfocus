@@ -1,5 +1,5 @@
 {
-  description = "Hocusfocus devshell and package";
+  description = "rust devshell and package, created by scaffolder";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -12,37 +12,30 @@
         pkgs = import nixpkgs { inherit system; };
       in {
         devShells.default = pkgs.mkShell {
-          name = "hocusfocus-devshell";
+          name = "rust-devshell";
 
           packages = with pkgs; [
-            go
-            gopls
-            gotools
-            delve
+            cargo
+            rustc
+            rustfmt
+            rust-analyzer
+            clippy
+            pkg-config
           ];
         };
 
-        packages.hocusfocus = pkgs.buildGoModule {
-          pname = "hocusfocus";
-          version = "2026.06.21-a";
+        packages.hocusfocus = pkgs.rustPlatform.buildRustPackage {
+          name = "hocusfocus";
+          version = "2.0.0";
 
-          src = self;
+          src = ./.;
 
-          vendorHash = "sha256-bWZmnNEUkc99TnQdgIqnY4ExsPkvo7GUSyfaYOLczAg=";
-
-          subPackages = [ "." ];
-          ldflags = [ "-s" "-w" ];
-
-          meta = with pkgs.lib; {
-            description = "A simple TUI productivity tool";
-            license = licenses.mit;
-            platforms = platforms.all;
-          };
+          cargoLock.lockFile = ./Cargo.lock;
         };
 
         apps.hocusfocus = {
           type = "app";
-          program = "${self.packages.${system}.hocusfocus}/bin/hocusfocus";
+          program = "${self.packages.${pkgs.stdenv.hostPlatform.system}.hocusfocus}/bin/hocusfocus";
         };
       });
 }
