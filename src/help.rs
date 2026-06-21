@@ -4,7 +4,7 @@ use humantime::format_duration;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 // MARK: types
 #[derive(Serialize, Deserialize, Debug)]
