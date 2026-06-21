@@ -1,5 +1,8 @@
+use chrono::Local;
 use demand::{DemandOption, Select};
+use humantime::format_duration;
 use std::env;
+use std::time::Duration;
 
 mod help;
 
@@ -13,7 +16,22 @@ fn main() {
                 return;
             }
             "currentsession" => {
-                println!("called currentsession");
+                let sessions: Vec<help::Session> = help::load_sessions();
+                let current: Option<&help::Session> = help::current_session(&sessions);
+
+                match current {
+                    Some(session) => {
+                        let elapsed = Local::now().signed_duration_since(session.start);
+                        let elapsed_dur = Duration::from_secs(elapsed.num_seconds() as u64);
+                        let format_elapsed = format_duration(elapsed_dur);
+                        println!(" Current session: {} ({})", session.kind, format_elapsed);
+                        return;
+                    }
+                    None => {
+                        println!(" No current session")
+                    }
+                }
+
                 return;
             }
             "stats" => {
