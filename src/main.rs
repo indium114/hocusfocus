@@ -1,3 +1,4 @@
+use demand::{DemandOption, Select};
 use std::env;
 
 mod help;
@@ -25,6 +26,17 @@ fn main() {
             }
         }
     }
+
+    let sessions: Vec<help::Session> = help::load_sessions();
+
+    let form = Select::new("HocusFocus")
+        .description("choose a session type")
+        .filterable(true)
+        .option(DemandOption::new("Work"))
+        .option(DemandOption::new("Study"))
+        .option(DemandOption::new("Waste"))
+        .option(DemandOption::new("Stop Current Session"));
+    let _ = form.run();
 
     println!("pretend this is a menu")
 }
