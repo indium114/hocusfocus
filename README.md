@@ -1,13 +1,25 @@
 # Hocusfocus
 
-*Hocusfocus* is a terminal-based productivity tracker written in Go!,
+*Hocusfocus* is a terminal-based productivity tracker written in Rust!,
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/indium114/hocusfocus)
 
 ## Installation
 
-```shell
-brew install indium114/formulae/hocusfocus
+### from the Binary
+
+Go to the *Releases* section on the right, click the latest release, and click the binary for your OS and architecture to download it.
+
+### with [wares](https://github.com/indium114/wares)
+
+Add the following to your `config.yaml` file (note: remove the `wares:` key and put it under your top-level `wares` key):
+
+```yaml
+wares:
+  hocusfocus:
+    name: hocusfocus
+    repo: indium114/hocusfocus
+    asset: "hocusfocus_Linux_x86_64"
 ```
 
 ## Usage
