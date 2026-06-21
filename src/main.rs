@@ -59,17 +59,17 @@ fn main() {
         Ok(choice) => match choice {
             "Work" => {
                 let _ = help::stop_session(&mut sessions);
-                help::start_session("work".to_string(), &mut sessions);
+                help::start_session("Work".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
             "Study" => {
                 let _ = help::stop_session(&mut sessions);
-                help::start_session("study".to_string(), &mut sessions);
+                help::start_session("Study".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
             "Waste" => {
                 let _ = help::stop_session(&mut sessions);
-                help::start_session("waste".to_string(), &mut sessions);
+                help::start_session("Waste".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
             "Stop Current Session" => {
