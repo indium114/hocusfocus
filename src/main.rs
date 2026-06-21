@@ -36,7 +36,25 @@ fn main() {
         .option(DemandOption::new("Study"))
         .option(DemandOption::new("Waste"))
         .option(DemandOption::new("Stop Current Session"));
-    let _ = form.run();
 
-    println!("pretend this is a menu")
+    match form.run() {
+        Ok(choice) => match choice {
+            "Work" => {
+                println!("Work")
+            }
+            "Study" => {
+                println!("Study")
+            }
+            "Waste" => {
+                println!("Waste")
+            }
+            "Stop Current Session" => {
+                println!("Stop")
+            }
+            _ => (),
+        },
+        Err(e) => {
+            panic!("error: {}", e);
+        }
+    }
 }
