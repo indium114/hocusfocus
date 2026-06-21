@@ -3,6 +3,7 @@ use demand::{DemandOption, Select};
 use humantime::format_duration;
 use std::env;
 use std::time::Duration;
+use std::io;
 
 mod help;
 
@@ -93,7 +94,11 @@ fn main() {
             _ => (),
         },
         Err(e) => {
-            panic!("error: {}", e);
+            if e.kind() == io::ErrorKind::Interrupted {
+                return
+            } else {
+                panic!("error: {}", e);
+            }
         }
     }
 }
