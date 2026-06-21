@@ -67,3 +67,15 @@ pub fn stop_session(sessions: &mut [Session]) {
         }
     }
 }
+
+pub fn start_session(kind: String, sessions: &mut Vec<Session>) {
+    let now: DateTime<FixedOffset> = Local::now().into();
+
+    let new_session = Session {
+        kind: kind,
+        start: now,
+        end: None,
+    };
+
+    sessions.push(new_session);
+}
