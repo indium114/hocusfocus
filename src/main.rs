@@ -58,14 +58,17 @@ fn main() {
     match form.run() {
         Ok(choice) => match choice {
             "Work" => {
+                let _ = stop_session(&mut sessions);
                 help::start_session("work".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
             "Study" => {
+                let _ = stop_session(&mut sessions);
                 help::start_session("study".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
             "Waste" => {
+                let _ = stop_session(&mut sessions);
                 help::start_session("waste".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
