@@ -1,4 +1,15 @@
+use chrono::{DateTime, FixedOffset, Local};
 use dirs;
+use serde::{Deserialize, Serialize};
+
+// MARK: types
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Session {
+    #[serde(rename = "type")]
+    pub r#type: String,
+    pub start: DateTime<FixedOffset>,
+    pub end: Option<DateTime<FixedOffset>>,
+}
 
 // MARK: dir helpers
 pub fn home_dir() -> String {
