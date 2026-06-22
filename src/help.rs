@@ -1,4 +1,5 @@
 use chrono::{DateTime, FixedOffset, Local};
+use comfy_table::{Table, modifiers::UTF8_ROUND_CORNERS, presets::UTF8_FULL};
 use humantime::format_duration;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -17,8 +18,7 @@ pub struct Session {
 // MARK: dir helpers
 pub fn home_dir() -> String {
     let dir = dirs::home_dir();
-    dir
-        .map(|p| p.to_string_lossy().into_owned())
+    dir.map(|p| p.to_string_lossy().into_owned())
         .unwrap_or_default()
 }
 
@@ -52,7 +52,10 @@ pub fn print_help() {
 }
 
 pub fn current_session(sessions: &[Session]) -> Option<&Session> {
-    sessions.iter().find(|&session| session.end.is_none()).map(|v| v as _)
+    sessions
+        .iter()
+        .find(|&session| session.end.is_none())
+        .map(|v| v as _)
 }
 
 pub fn stop_session(sessions: &mut [Session]) {
@@ -99,7 +102,16 @@ pub fn print_stats() {
         return;
     }
 
+    let mut table = Table::new();
+    table
+        .load_preset(UTF8_FULL)
+        .apply_modifier(UTF8_ROUND_CORNERS)
+        .set_header(vec!["session type", "total time"]);
+
     for (kind, dur) in totals {
-        println!("{}: {}", kind, format_duration(dur))
+        let formatted_duration = format_duration(dur);
+        table.add_row(vec![kind, format!("{formatted_duration}")]);
     }
+
+    println!("{table}");
 }
