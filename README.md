@@ -29,6 +29,7 @@ wares:
 Run the `hocusfocus` command to enter the main interface
 
 There are **three** session types to choose from: `Work`, `Study`, and `Waste`.
+> if none of these session types apply to what you're doing, choose the `Custom` session type and type in what you're doing.
 
 Use the `arrow keys` to navigate up and down, and use the `enter` key to select an option.
 
