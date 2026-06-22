@@ -1,5 +1,5 @@
 use chrono::Local;
-use demand::{DemandOption, Select};
+use demand::{DemandOption, Input, Select};
 use humantime::format_duration;
 use std::env;
 use std::io;
@@ -43,7 +43,7 @@ fn main() {
             }
             "version" => {
                 println!("hocusfocus {}", VERSION);
-                return
+                return;
             }
             _ => {
                 help::print_help();
@@ -54,12 +54,13 @@ fn main() {
 
     let mut sessions: Vec<help::Session> = help::load_sessions();
 
-    let form = Select::new("HocusFocus")
+    let form = Select::new("hocusfocus")
         .description("choose a session type")
         .filterable(true)
         .option(DemandOption::new("Work"))
         .option(DemandOption::new("Study"))
         .option(DemandOption::new("Waste"))
+        .option(DemandOption::new("Custom"))
         .option(DemandOption::new("Stop Current Session"));
 
     match form.run() {
@@ -77,6 +78,25 @@ fn main() {
             "Waste" => {
                 let _ = help::stop_session(&mut sessions);
                 help::start_session("Waste".to_string(), &mut sessions);
+                help::save_sessions(sessions);
+            }
+            "Custom" => {
+                let input = Input::new("Custom Session")
+                    .description("enter the name of the custom session (not case-sensitive)")
+                    .placeholder("e.g. researching, gaming");
+                let name = match input.run() {
+                    Ok(kind) => kind.to_lowercase(),
+                    Err(e) => {
+                        if e.kind() == io::ErrorKind::Interrupted {
+                            return;
+                        } else {
+                            panic!("error: {}", e);
+                        }
+                    }
+                };
+
+                let _ = help::stop_session(&mut sessions);
+                help::start_session(name.to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
             "Stop Current Session" => {
