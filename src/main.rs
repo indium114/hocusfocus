@@ -43,7 +43,7 @@ fn main() {
             }
             "version" => {
                 println!("hocusfocus {}", VERSION);
-                return
+                return;
             }
             _ => {
                 help::print_help();
@@ -54,7 +54,7 @@ fn main() {
 
     let mut sessions: Vec<help::Session> = help::load_sessions();
 
-    let form = Select::new("HocusFocus")
+    let form = Select::new("hocusfocus")
         .description("choose a session type")
         .filterable(true)
         .option(DemandOption::new("Work"))

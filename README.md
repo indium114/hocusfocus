@@ -1,8 +1,8 @@
-# Hocusfocus
+# hocusfocus
 
-![Preview of Hocusfocus](assets/preview.png)
+![Preview of hocusfocus](assets/preview.png)
 
-*Hocusfocus* is a terminal-based productivity tracker written in Rust!,
+*hocusfocus* is a terminal-based productivity tracker written in Rust!,
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/indium114/hocusfocus)
 
