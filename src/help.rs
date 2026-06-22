@@ -1,5 +1,5 @@
 use chrono::{DateTime, FixedOffset, Local};
-use comfy_table::Table;
+use comfy_table::{Table, modifiers::UTF8_ROUND_CORNERS, presets::UTF8_FULL};
 use humantime::format_duration;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -103,7 +103,10 @@ pub fn print_stats() {
     }
 
     let mut table = Table::new();
-    table.set_header(vec!["session type", "total time"]);
+    table
+        .load_preset(UTF8_FULL)
+        .apply_modifier(UTF8_ROUND_CORNERS)
+        .set_header(vec!["session type", "total time"]);
 
     for (kind, dur) in totals {
         let formatted_duration = format_duration(dur);
