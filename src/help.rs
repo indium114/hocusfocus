@@ -1,5 +1,4 @@
 use chrono::{DateTime, FixedOffset, Local};
-use dirs;
 use humantime::format_duration;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -18,13 +17,13 @@ pub struct Session {
 // MARK: dir helpers
 pub fn home_dir() -> String {
     let dir = dirs::home_dir();
-    return dir
+    dir
         .map(|p| p.to_string_lossy().into_owned())
-        .unwrap_or_default();
+        .unwrap_or_default()
 }
 
 pub fn store_path() -> String {
-    return home_dir() + "/.hocusfocus.json";
+    home_dir() + "/.hocusfocus.json"
 }
 
 // MARK: save/load helpers
@@ -53,12 +52,7 @@ pub fn print_help() {
 }
 
 pub fn current_session(sessions: &[Session]) -> Option<&Session> {
-    for session in sessions {
-        if session.end.is_none() {
-            return Some(session);
-        }
-    }
-    return None;
+    sessions.iter().find(|&session| session.end.is_none()).map(|v| v as _)
 }
 
 pub fn stop_session(sessions: &mut [Session]) {
@@ -76,7 +70,7 @@ pub fn start_session(kind: String, sessions: &mut Vec<Session>) {
     let now: DateTime<FixedOffset> = Local::now().into();
 
     let new_session = Session {
-        kind: kind,
+        kind,
         start: now,
         end: None,
     };
@@ -100,7 +94,7 @@ pub fn print_stats() {
         }
     }
 
-    if totals.len() == 0 {
+    if totals.is_empty() {
         println!(" No sessions have been completed.");
         return;
     }

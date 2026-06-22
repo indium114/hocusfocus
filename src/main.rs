@@ -66,17 +66,17 @@ fn main() {
     match form.run() {
         Ok(choice) => match choice {
             "Work" => {
-                let _ = help::stop_session(&mut sessions);
+                help::stop_session(&mut sessions);
                 help::start_session("Work".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
             "Study" => {
-                let _ = help::stop_session(&mut sessions);
+                help::stop_session(&mut sessions);
                 help::start_session("Study".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
             "Waste" => {
-                let _ = help::stop_session(&mut sessions);
+                help::stop_session(&mut sessions);
                 help::start_session("Waste".to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
@@ -95,7 +95,7 @@ fn main() {
                     }
                 };
 
-                let _ = help::stop_session(&mut sessions);
+                help::stop_session(&mut sessions);
                 help::start_session(name.to_string(), &mut sessions);
                 help::save_sessions(sessions);
             }
@@ -121,7 +121,6 @@ fn main() {
         },
         Err(e) => {
             if e.kind() == io::ErrorKind::Interrupted {
-                return;
             } else {
                 panic!("error: {}", e);
             }
