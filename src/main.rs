@@ -27,12 +27,18 @@ fn main() {
                         let elapsed = Local::now().signed_duration_since(session.start);
                         let elapsed_dur = Duration::from_secs(elapsed.num_seconds() as u64);
                         let format_elapsed = format_duration(elapsed_dur);
-                        println!(" Current session: {} ({})", session.kind, format_elapsed);
+                        match args.get(2).map(|s| s.as_str()).unwrap_or("") {
+                            "--minimal" => println!(" {} ({})", session.kind, format_elapsed),
+                            _ => {
+                                println!(" Current session: {} ({})", session.kind, format_elapsed)
+                            }
+                        }
                         return;
                     }
-                    None => {
-                        println!(" No current session")
-                    }
+                    None => match args.get(2).map(|s| s.as_str()).unwrap_or("") {
+                        "--minimal" => println!(" <none>"),
+                        _ => println!(" No current session"),
+                    },
                 }
 
                 return;
