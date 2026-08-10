@@ -1,5 +1,7 @@
 [package]
 name = "hocusfocus"
+description = "A terminal-based productivity tracker"
+license = "MIT"
 version = "2.2.1"
 edition = "2024"
 

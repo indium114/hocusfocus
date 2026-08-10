@@ -24,6 +24,14 @@ wares:
     asset: "hocusfocus_Linux_x86_64"
 ```
 
+### with cargo
+
+Run the following; ensure that `~/.cargo/bin` is in $PATH.
+
+```shell
+cargo install hocusfocus
+```
+
 ## Usage
 
 Run the `hocusfocus` command to enter the main interface
